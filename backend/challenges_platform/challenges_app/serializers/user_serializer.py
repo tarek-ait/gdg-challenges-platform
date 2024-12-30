@@ -1,46 +1,52 @@
 from rest_framework import serializers
 from ..models import User, UserProfile, Team
 
+from rest_framework import serializers
+from ..models import User, UserProfile, Team
+
 class UserProfileSerializer(serializers.ModelSerializer):
-    team_name = serializers.CharField(source='team_id.name', read_only=True)
+    team_id = serializers.PrimaryKeyRelatedField(queryset=Team.objects.all(), source='team', required=False)
 
     class Meta:
         model = UserProfile
-        fields = ['phone_number', 'team_name']  # Only team_name and phone_number are shown in the response
+        fields = ['phone_number', 'team_id']  # Only team_id and phone_number are shown in the response
 
 class UserSerializer(serializers.ModelSerializer):
-    user_profile = UserProfileSerializer(source='userprofile', required=False)  # Optional profile data
+    user_profile = UserProfileSerializer(source='profile', required=False)  # Optional profile data
 
     class Meta:
         model = User
         fields = ['id', 'username', 'email', 'first_name', 'last_name', 'password', 'is_staff', 'user_profile']
+        extra_kwargs = {'password': {'write_only': True}}
 
     def create(self, validated_data):
         # Extract UserProfile data
-        user_profile_data = validated_data.pop('user_profile', None)
+        user_profile_data = validated_data.pop('profile', None)
 
         # Create the User object with password handling
         user = User.objects.create_user(**validated_data)
 
         # Create UserProfile if data is provided
         if user_profile_data:
-            user_profile = UserProfile.objects.create(
+            UserProfile.objects.create(
                 user=user,
                 phone_number=user_profile_data.get('phone_number', None),
-                team_id=user_profile_data.get('team_id', None)
+                team=user_profile_data.get('team', None)
             )
 
         return user
 
     def update(self, instance, validated_data):
         # Extract UserProfile data
-        user_profile_data = validated_data.pop('user_profile', None)
+        user_profile_data = validated_data.pop('profile', None)
 
         # Update the User object
         instance.username = validated_data.get('username', instance.username)
         instance.email = validated_data.get('email', instance.email)
         instance.first_name = validated_data.get('first_name', instance.first_name)
         instance.last_name = validated_data.get('last_name', instance.last_name)
+        if 'password' in validated_data:
+            instance.set_password(validated_data['password'])
         instance.is_staff = False
         instance.save()
 
@@ -51,7 +57,7 @@ class UserSerializer(serializers.ModelSerializer):
             
             # Update fields of the profile
             user_profile.phone_number = user_profile_data.get('phone_number', user_profile.phone_number)
-            user_profile.team_id = user_profile_data.get('team_id', user_profile.team_id)
+            user_profile.team = user_profile_data.get('team', user_profile.team)
             user_profile.save()
 
         return instance

@@ -8,7 +8,7 @@ const SignupPage = () => {
   // here are the data form for the user 
   // fields = ['id', 'username', 'email', 'firstName', 'lastName', 'password', 'is_staff', 'user_profile'] + the phone number and the team id, the id is created by default 
 
-  const { signup, isSingingUp } = useAuthStore()
+  const { signup, isSigninup } = useAuthStore()
   const [showPassword, setShowPassword] = useState(false)
   const [formData, setFormData] = useState({
     username: '',
@@ -195,8 +195,8 @@ const SignupPage = () => {
               </div>
             </div>
 
-            <button type="submit" className="btn btn-primary w-full" disabled={isSingingUp} >
-              {isSingingUp ? (
+            <button type="submit" className="btn btn-primary w-full" disabled={isSigninup} >
+              {isSigninup ? (
                 <>
                   <Loader className="size-5 animate-spin"> </Loader>
                 </>
@@ -206,6 +206,7 @@ const SignupPage = () => {
             </button>
           </form>
 
+         
           <div className="text-center">
             <p className="text-base-content/50">
               Already have an account?&nbsp;&nbsp;{""}

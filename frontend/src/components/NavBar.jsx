@@ -4,7 +4,7 @@ import { useAuthStore } from '../store/useAuthStore';
 
 const NavBar = () => {
 
-    const { user } = useAuthStore();
+    const { user, logout } = useAuthStore();
 
     return (
         <div className="navbar bg-base-100 px-6 shadow-md fixed top-0">
@@ -61,7 +61,7 @@ const NavBar = () => {
                         </Link>
 
                         <Link to={"/"}>
-                            <button className="flex gap-1.5 items-center justify-center">
+                            <button className="flex gap-1.5 items-center justify-center" onClick={logout}>
                                 <LogOut className="size-5"></LogOut>
                                 <span className="hidden sm:inline">Logout</span>
                             </button>
