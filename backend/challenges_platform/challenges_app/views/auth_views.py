@@ -49,7 +49,7 @@ def signup(request):
         # Create token after UserProfile is created successfully
         token, _ = Token.objects.get_or_create(user=user)
 
-        return Response({'token': token.key, 'user': serializer.data}, status=status.HTTP_201_CREATED)
+        return Response({'token': token.key, 'user': serializer.data, 'phone_number':phone_number}, status=status.HTTP_201_CREATED)
 
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -85,6 +85,7 @@ def login(request):
     }, status=status.HTTP_200_OK)
 
 
+# there is no need for this function, since we are requiring the token each time the user tries to run a feature.
 @api_view(['GET'])
 @authentication_classes([SessionAuthentication, TokenAuthentication])
 @permission_classes([IsAuthenticated])

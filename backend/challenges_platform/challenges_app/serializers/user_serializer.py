@@ -41,7 +41,7 @@ class UserSerializer(serializers.ModelSerializer):
         instance.email = validated_data.get('email', instance.email)
         instance.first_name = validated_data.get('first_name', instance.first_name)
         instance.last_name = validated_data.get('last_name', instance.last_name)
-        instance.is_staff = validated_data.get('is_staff', instance.is_staff)
+        instance.is_staff = False
         instance.save()
 
         # Update the UserProfile if necessary

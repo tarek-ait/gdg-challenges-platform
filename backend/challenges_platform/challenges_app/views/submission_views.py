@@ -8,8 +8,6 @@ from rest_framework.authtoken.models import Token
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.paginator import Paginator
 from rest_framework.decorators import api_view
-
-
 #  ensuring that the user is logged in
 
 # submitting a soluton for  team

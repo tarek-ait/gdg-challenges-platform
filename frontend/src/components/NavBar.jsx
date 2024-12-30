@@ -1,13 +1,13 @@
-import { User, LogOut } from 'lucide-react';
+import { User, LogOut, Swords } from 'lucide-react';
 import { Link } from 'react-router-dom';
-
+import { useAuthStore } from '../store/useAuthStore';
 
 const NavBar = () => {
 
-    const authUser = true;
+    const { user } = useAuthStore();
 
     return (
-        <div className="navbar bg-base-100 px-6">
+        <div className="navbar bg-base-100 px-6 shadow-md fixed top-0">
             <div className="navbar-start">
                 <div className="dropdown">
                     <div tabIndex={0} role="button" className="btn btn-ghost lg:hidden">
@@ -27,7 +27,7 @@ const NavBar = () => {
                     <ul
                         tabIndex={0}
                         className="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow">
-                        {authUser && (
+                        {user && (
                             <>
                                 <Link to={"/challenges"} className='btn'>Challenges</Link>
                                 <Link to={"/team"} className='btn'>Team</Link>
@@ -36,11 +36,14 @@ const NavBar = () => {
                         )}
                     </ul>
                 </div>
-                <Link to={"/"} className="btn btn-ghost text-xl">GDG!</Link>
+                <Link to={"/"} className="btn btn-ghost text-xl">
+                    <Swords />
+                    GDG!
+                </Link>
             </div>
             <div className="navbar-center hidden lg:flex">
                 <ul className="menu menu-horizontal px-1 gap-3">
-                    {authUser && (
+                    {user && (
                         <>
                             <Link to={"/challenges"} className='btn'>Challenges</Link>
                             <Link to={"/team"} className='btn'>Team</Link>
@@ -50,7 +53,7 @@ const NavBar = () => {
                 </ul>
             </div>
             <div className="navbar-end gap-5">
-                {authUser && (
+                {user && (
                     <>
                         <Link to={"/profile"} className='flex gap-1 items-center justify-center'>
                             <User className="size-5"></User>
@@ -67,7 +70,7 @@ const NavBar = () => {
                     </>
                     // we will leave the settings option inside the profile page.
                 )}
-                {!authUser && (
+                {!user && (
                     <>
                         <Link to={"/login"} className="btn">Login</Link>
                         <Link to={"/signup"} className="btn">Signup</Link>

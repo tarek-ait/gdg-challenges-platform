@@ -38,5 +38,5 @@ urlpatterns = [
     # create a new team (POST request)
     re_path('signup/', views.signup),
     # testing a token 
-    re_path('test_token/', views.test_token),
+    re_path('', views.test_token),
 ]

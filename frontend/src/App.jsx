@@ -13,6 +13,7 @@ import LoginPage from './pages/Users/LoginPage.jsx'
 import ChallengesPage from './pages/Users/ChallengesPage.jsx'
 import ChallengePreviewPage from './pages/Users/ChallengePreviewPage.jsx'
 import HomePage from './pages/HomePage.jsx'
+import { Toaster } from 'react-hot-toast'
 // importing the navigation bar 
 import NavBar from './components/NavBar.jsx'
 
@@ -21,25 +22,32 @@ function App() {
 
   return (
     <Router>
-    <>
-      <NavBar />
-      <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/admin/users" element={<UsersPage />} />
-        <Route path="/admin/teams" element={<TeamsPage />} />
-        <Route path="/admin/submissions" element={<SubmissionsPage />} />
-        <Route path="/admin/login" element={<AdminLoginPage />} />
-        <Route path="/admin/add-challenge" element={<AddChallenge />} />
-        <Route path="/profile" element={<ProfilePage />} />
-        <Route path="/team" element={<TeamPage />} />
-        <Route path="/submission" element={<SubmissionPage />} />
-        <Route path="/signup" element={<SignupPage />} />
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/challenges" element={<ChallengesPage />} />
-        <Route path="/challenge-preview" element={<ChallengePreviewPage />} />
-      </Routes>
-    </>
-  </Router>
+
+      <div className="app-container">
+        <NavBar />
+        <Toaster />
+        <div className="pt-16">
+          <Routes>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/admin/users" element={<UsersPage />} />
+            <Route path="/admin/teams" element={<TeamsPage />} />
+            <Route path="/admin/submissions" element={<SubmissionsPage />} />
+            <Route path="/admin/login" element={<AdminLoginPage />} />
+            <Route path="/admin/add-challenge" element={<AddChallenge />} />
+            <Route path="/profile" element={<ProfilePage />} />
+            <Route path="/team" element={<TeamPage />} />
+            <Route path="/submission" element={<SubmissionPage />} />
+            <Route path="/signup" element={<SignupPage />} />
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/challenges" element={<ChallengesPage />} />
+            <Route path="/challenge-preview" element={<ChallengePreviewPage />} />
+          </Routes>
+        </div>
+
+
+      </div>
+
+    </Router>
 
   )
 }
