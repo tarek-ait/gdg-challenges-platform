@@ -53,9 +53,12 @@ def list_challenges(request):
         challenges_list.append({
             'id': challenge.id,
             'title': challenge.title,
+            'category': challenge.category,
             'description': challenge.description,
             'resources': challenge.resources,
-            'status': challenge.status
+            'status': challenge.status,
+            'inserted_at': challenge.inserted_at,
+            'deadline': challenge.deadline if challenge.deadline else "Not Available"
         })
 
     # Return the paginated challenges list in JSON format

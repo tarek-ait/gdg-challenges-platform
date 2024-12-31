@@ -7,7 +7,7 @@ class Challenge(models.Model):
     title = models.CharField(max_length=255)
     category = models.CharField(max_length=255)
     description = models.TextField()
-    resources = models.URLField(blank=True, null=True)  # Resources link (optional)
+    resources = models.TextField(blank=True, null=True)  # Resources link (optional), to the pdf file
     status = models.BooleanField(default=False)  # Status of the challenge
     inserted_at = models.DateTimeField(auto_now_add=True)  # Creation timestamp
     deadline = models.DateTimeField(null=True, blank=True)  # Optional deadline

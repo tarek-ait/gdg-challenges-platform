@@ -72,13 +72,23 @@ function App() {
                 )
               }
             />
-            <Route path="/submission" element={user ? <SubmissionPage /> : <Navigate to="/login" />} />
+            <Route path="/submission" element={
+                user ? (
+                  team ? (
+                    <SubmissionPage />
+                  ) : (
+                    <Navigate to="/join-team" />
+                  )
+                ) : (
+                  <Navigate to="/login" />
+                )
+              } />
             <Route path="/signup" element={!user ? <SignupPage /> : <Navigate to="/" />} />
             <Route path="/login" element={!user ? <LoginPage /> : <Navigate to="/" />} />
             <Route path="/join-team" element={user && !team ? <JoinTeamPage /> : <Navigate to="/login" />} />
             <Route path="/create-team" element={user && !team ? <CreatTeamPage /> : <Navigate to="/login" />} />
             <Route path="/challenges" element={user ? <ChallengesPage /> : <Navigate to="/login" />} />
-            <Route path="/challenge-preview" element={user ? <ChallengePreviewPage /> : <Navigate to="/login" />} />
+            <Route path="/challenge-preview/:id" element={user ? <ChallengePreviewPage /> : <Navigate to="/login" />} />
           </Routes>
         </div>
 
