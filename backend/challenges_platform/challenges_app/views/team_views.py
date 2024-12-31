@@ -97,8 +97,12 @@ def team_space_info(request,team_id):
         user = token.user
     except Token.DoesNotExist:
         return JsonResponse({'error': 'Invalid or expired token.'}, status=401)
+    
+    # Ensure the user has a UserProfile, create if missing
+    user_profile, created = UserProfile.objects.get_or_create(user=user)
+    
     # Check if the user already has a team assigned
-    if not user.userprofile.team_id:
+    if not user_profile.team_id:
             return JsonResponse({'error': 'You are not a part of a team.'}, status=400)
     try:
         # Retrieve the team using the provided team_id
@@ -106,20 +110,20 @@ def team_space_info(request,team_id):
     except Team.DoesNotExist:
         return JsonResponse({'error': 'Team not found'}, status=404)
 
-   # Ensure the user has a UserProfile, create if missing
-    user_profile, created = UserProfile.objects.get_or_create(user=user)
     
     # Check if the user has a team and if their team matches the requested team_id
     if user_profile.team_id is None:
         return JsonResponse({'error': 'You are not a part of a team.'}, status=400)
     
+    
     # Compare the team_id of the user with the team_id in the URL
-    if user_profile.team_id.id != team_id:
+    if user_profile.team_id != int(team_id):
         return JsonResponse({'error': 'You are not allowed to review this team.'}, status=400)
 
+    
 
-    members = User.objects.filter(userprofile__team_id=team.id)
-
+    user_profiles = UserProfile.objects.filter(team_id=team)
+    members = [user_profile.user for user_profile in user_profiles]
     # Get the team leader information
     team_leader = team.team_leader.username if team.team_leader else None  # Username of the team leader
 
@@ -143,7 +147,18 @@ def team_space_info(request,team_id):
         'team_id': team.id,
         'team_name': team.name,
         'team_leader': team_leader,
-        'members': [member.username for member in members],
+        'members': [
+            {
+                'username': member.username,
+                'first_name': member.first_name,
+                'last_name': member.last_name,
+                'email': member.email,
+                'profile': {
+                    'phone_number': member.profile.phone_number if hasattr(member.profile, 'phone_number') else None
+                }
+            }
+            for member in members
+        ],
     }
 
     if challenge:

@@ -104,4 +104,24 @@ export const useTeamsStore = create((set) => ({
     }
     set({ isLeavingTeam: false });
   },
+
+  // get info for the team sapce page 
+  getTeamInfo: async (teamId) => {
+    const { token } = useAuthStore.getState();
+    set({ isFetchingTeamInfo: true });
+    try {
+      const response = await axiosInstance.get(`teams/${teamId}/info/`, {
+        headers: {
+          Authorization: `Token ${token}`,
+        },
+      });
+      console.log(response.data);
+      set({ team: response.data });
+    } catch (error) {
+      const errorMessage = error.response?.data?.error || 'Failed to get team info';
+      toast.error(errorMessage);
+    } finally {
+      set({ isFetchingTeamInfo: false });
+    }
+  },
 }));
