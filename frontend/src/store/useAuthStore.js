@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import toast from "react-hot-toast";
 import { axiosInstance } from "../lib/axios";
-
+import { useTeamsStore } from './useTeamsStore';
 export const useAuthStore = create((set) => ({
   token: null,
   user: null, // the user information
@@ -10,21 +10,24 @@ export const useAuthStore = create((set) => ({
   isSigninup: false,
   isLoginIn: false,
   isCheckingAuth: true,
-  challenges: [],
-  teams: [],
-  submissions: [],
-  users: [],
-  isAdmin: false, // once an admin is logged in this will be set to true, to not display what the admin can do, still if this is changed in the client the auth is done in the backend.
-
+  // when a user is authenticated, he is redirected to the create team or join team page, he gets to choose leave it for later if he wants 
   checkAuth: async () => {
     // we just see if there is a token available in the local storage, there is no function check auth in the backend
     const token = localStorage.getItem("token");
     const user =  localStorage.getItem("user");
     const phoneNumber = localStorage.getItem("phoneNumber");
     const teamId = localStorage.getItem("teamId");
-    set({ isCheckingAuth: false });
+    set({ isCheckingAuth: false })
     if (token) {
       set({ user: user, phoneNumber: phoneNumber, teamId: teamId, token: token });
+
+      // Update the teamId state in useTeamsStore
+      const { setTeam } = useTeamsStore.getState();
+      if (teamId === null || teamId === "null") {
+        setTeam(false);
+      } else {
+        setTeam(true);
+      }
       return true;
     }
     return false;
@@ -97,4 +100,6 @@ export const useAuthStore = create((set) => ({
     });
     toast.success("Logged out successfully!");
   },
+
+
 }));

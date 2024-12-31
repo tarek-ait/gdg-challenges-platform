@@ -4,7 +4,9 @@ import { useAuthStore } from '../store/useAuthStore';
 
 const NavBar = () => {
 
-    const { user, logout } = useAuthStore();
+    const { user, logout, teamId } = useAuthStore();
+
+    console.log(teamId);
 
     return (
         <div className="navbar bg-base-100 px-6 shadow-md fixed top-0">
@@ -30,7 +32,7 @@ const NavBar = () => {
                         {user && (
                             <>
                                 <Link to={"/challenges"} className='btn'>Challenges</Link>
-                                <Link to={"/team"} className='btn'>Team</Link>
+                                <Link to={teamId !== null && teamId !== undefined ? `/team/${teamId}` : "/join-team"} className="btn">Team</Link>
                                 <Link to={"/submission"} className='btn'>Submission</Link>
                             </>
                         )}
@@ -46,7 +48,7 @@ const NavBar = () => {
                     {user && (
                         <>
                             <Link to={"/challenges"} className='btn'>Challenges</Link>
-                            <Link to={"/team"} className='btn'>Team</Link>
+                            <Link to={teamId !== null && teamId !== undefined ? `/team/${teamId}` : "/join-team"} className="btn">Team</Link>
                             <Link to={"/submission"} className='btn'>Submission</Link>
                         </>
                     )}

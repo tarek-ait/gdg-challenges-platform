@@ -29,7 +29,7 @@ urlpatterns = [
     #leaving a team 
     path('teams/leave/', views.leave_team, name='leaving_team'),
     #joinning a team
-    path('teams/<int:team_id>', views.join_team, name='joining_team'),
+    path('teams/join/', views.join_team, name='joining_team'),
     
     # login a user 
     re_path('login/', views.login),

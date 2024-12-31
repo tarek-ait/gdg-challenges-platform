@@ -33,7 +33,6 @@ const LoginPage = () => {
     e.preventDefault();
     const dataValidated = validateDataForm();
     if (dataValidated) {
-      console.log(dataValidated);
       login(formData);
     }
   }
@@ -41,7 +40,7 @@ const LoginPage = () => {
 
   const useAuth = false;
   return (
-    <div className="grid min-h-screen">
+    <div className="grid min-h-screen py-10">
       {/* Left side */}
       <div className="flex flex-col justify-center items-center p-6 smp">
         <div className="w-full max-w-md space-y-8">
@@ -120,7 +119,10 @@ const LoginPage = () => {
         </div>
       </div>
       {!useAuth && (
-        <AdminShowLogin  />
+        <div className="container my-10">
+          <AdminShowLogin className="my-10" />
+        </div>
+
       )}
     </div>
 

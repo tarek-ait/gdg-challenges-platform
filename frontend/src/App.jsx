@@ -18,12 +18,15 @@ import { Loader } from 'lucide-react'
 // importing the navigation bar 
 import NavBar from './components/NavBar.jsx'
 import { useAuthStore } from '../src/store/useAuthStore.js';
+import { useTeamsStore } from './store/useTeamsStore.js';
 import { useEffect } from 'react'
+import JoinTeamPage from './pages/Users/JoinTeamPage.jsx'
+import CreatTeamPage from './pages/Users/CreateTeamPage.jsx'
 
 function App() {
 
-  const { user, checkAuth, isCheckingAuth } = useAuthStore();
-
+  const { user,  checkAuth, isCheckingAuth } = useAuthStore();
+  const { team} = useTeamsStore();
 
   useEffect(() => {
     checkAuth();
@@ -55,10 +58,25 @@ function App() {
             <Route path="/admin/login" element={!user ? <AdminLoginPage /> : <Navigate to="/" />} />
             <Route path="/admin/add-challenge" element={user ? <AddChallenge /> : <Navigate to="/login" />} />
             <Route path="/profile" element={user ? <ProfilePage /> : <Navigate to="/login" />} />
-            <Route path="/team" element={user ? <TeamPage /> : <Navigate to="/login" />} />
+            <Route
+              path="/team/:teamId"
+              element={
+                user ? (
+                  team ? (
+                    <TeamPage />
+                  ) : (
+                    <Navigate to="/join-team" />
+                  )
+                ) : (
+                  <Navigate to="/login" />
+                )
+              }
+            />
             <Route path="/submission" element={user ? <SubmissionPage /> : <Navigate to="/login" />} />
             <Route path="/signup" element={!user ? <SignupPage /> : <Navigate to="/" />} />
             <Route path="/login" element={!user ? <LoginPage /> : <Navigate to="/" />} />
+            <Route path="/join-team" element={user && !team ? <JoinTeamPage /> : <Navigate to="/login" />} />
+            <Route path="/create-team" element={user && !team ? <CreatTeamPage /> : <Navigate to="/login" />} />
             <Route path="/challenges" element={user ? <ChallengesPage /> : <Navigate to="/login" />} />
             <Route path="/challenge-preview" element={user ? <ChallengePreviewPage /> : <Navigate to="/login" />} />
           </Routes>

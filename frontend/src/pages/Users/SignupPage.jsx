@@ -69,7 +69,7 @@ const SignupPage = () => {
 
 
   return (
-    <div className="min-h-screen  grid">
+    <div className="min-h-screen py-10 grid">
       <div className="flex flex-col justify-center items-center p-6 smp">
         <div className="w-full max-w-md space-y-8">
           {/* Logo */}
