@@ -23,7 +23,7 @@ export const useAuthStore = create((set) => ({
 
       // Update the teamId state in useTeamsStore
       const { setTeam } = useTeamsStore.getState();
-      if (teamId === null || teamId === "null") {
+      if (teamId === null || teamId === "null" || teamId === "undefined") {
         setTeam(false);
       } else {
         setTeam(true);
@@ -36,6 +36,7 @@ export const useAuthStore = create((set) => ({
   signup: async (data) => {
     set({ isSigninup: true });
     try {
+      
       // Adjust the request data structure
       const requestData = {
         username: data.username,
@@ -47,6 +48,7 @@ export const useAuthStore = create((set) => ({
           phone_number: data.phoneNumber,
         },
       };
+      console.log(requestData);
 
       const response = await axiosInstance.post("signup/", requestData);
       localStorage.setItem("token", response.data.token);
@@ -62,7 +64,7 @@ export const useAuthStore = create((set) => ({
       toast.success("Account created successfully!");
     } catch (error) {
       console.log(error);
-      toast.error(error.response.data.message);
+      toast.error(error.response.data.username);
     }
     set({ isSigninup: false });
   },

@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { useTeamsStore } from'../../store/useTeamsStore.js'; // Adjust the import path as necessary
 import { toast } from 'react-hot-toast';
 import { ShieldHalf, Lock, Eye, EyeOff, Loader } from 'lucide-react'; // Adjust the import path as necessary
+import { useNavigate } from 'react-router-dom';
 
 const CreateTeamPage = () => {
     const [formData, setFormData] = useState({
@@ -10,6 +11,7 @@ const CreateTeamPage = () => {
         password: "",
     })
 
+    const navigate = useNavigate();
     const { createTeam, isCreatingTeam } = useTeamsStore();
 
     const [showPassword, setShowPassword] = useState(false);
@@ -29,7 +31,7 @@ const CreateTeamPage = () => {
         e.preventDefault();
         const dataValidated = validateDataForm(formData);
         if (dataValidated) {
-            createTeam(formData);
+            createTeam(formData,navigate);
         }
     }
 

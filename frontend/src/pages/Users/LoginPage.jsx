@@ -119,7 +119,7 @@ const LoginPage = () => {
         </div>
       </div>
       {!useAuth && (
-        <div className="container my-10">
+        <div className="container">
           <AdminShowLogin className="my-10" />
         </div>
 

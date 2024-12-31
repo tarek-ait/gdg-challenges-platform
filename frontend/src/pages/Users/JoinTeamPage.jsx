@@ -3,12 +3,14 @@ import { useState } from 'react';
 import { useTeamsStore } from'../../store/useTeamsStore.js'; // Adjust the import path as necessary
 import { toast } from 'react-hot-toast';
 import { ShieldHalf, Lock, Eye, EyeOff, Loader } from 'lucide-react'; // Adjust the import path as necessary
-
+import { useNavigate } from 'react-router-dom';
 const JoinTeamPage = () => {
     const [formData, setFormData] = useState({
         teamName: "",
         password: "",
     })
+
+    const navigate = useNavigate();
 
     const { joinTeam, isJoiningTeam } = useTeamsStore();
 
@@ -29,7 +31,7 @@ const JoinTeamPage = () => {
         e.preventDefault();
         const dataValidated = validateDataForm(formData);
         if (dataValidated) {
-            joinTeam(formData);
+            joinTeam(formData,navigate);
         }
     }
 

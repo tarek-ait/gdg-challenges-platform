@@ -254,7 +254,7 @@ def leave_team(request):
             return JsonResponse({'error': 'You are not a part of a team.'}, status=400)
 
         # Get the team the user is part of
-        team = user_profile.team_id
+        team = user_profile.team
 
         # Update the user's profile to reference the newly created team
         user_profile.team_id = None
