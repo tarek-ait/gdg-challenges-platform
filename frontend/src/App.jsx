@@ -26,13 +26,11 @@ import CreatTeamPage from './pages/Users/CreateTeamPage.jsx'
 function App() {
 
   const { user,  checkAuth, isCheckingAuth } = useAuthStore();
-  const { team} = useTeamsStore();
+  const { team } = useTeamsStore();
 
   useEffect(() => {
     checkAuth();
   }, [checkAuth, user]);
-
-
 
   if (isCheckingAuth) {
     return (
@@ -42,14 +40,12 @@ function App() {
     );
   }
 
-
-
   return (
-    <Router>
-      <div className="app-container">
+    <Router >
+      <div className="bg-base-200 " >
         <NavBar />
         <Toaster />
-        <div className="pt-16">
+        <div className="min-h-screen">
           <Routes>
             <Route path="/" element={<HomePage />} />
             <Route path="/admin/users" element={user ? <UsersPage /> : <Navigate to="/login" />} />

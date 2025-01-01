@@ -6,7 +6,6 @@ export const useAuthStore = create((set) => ({
   token: null,
   user: null, // the user information
   teamId: null, // the team information
-  phoneNumber: null, // the phone number of the user
   isSigninup: false,
   isLoginIn: false,
   isCheckingAuth: true,
@@ -15,11 +14,10 @@ export const useAuthStore = create((set) => ({
     // we just see if there is a token available in the local storage, there is no function check auth in the backend
     const token = localStorage.getItem("token");
     const user =  localStorage.getItem("user");
-    const phoneNumber = localStorage.getItem("phoneNumber");
     const teamId = localStorage.getItem("teamId");
     set({ isCheckingAuth: false })
     if (token) {
-      set({ user: user, phoneNumber: phoneNumber, teamId: teamId, token: token });
+      set({ user: user, teamId: teamId, token: token });
 
       // Update the teamId state in useTeamsStore
       const { setTeam } = useTeamsStore.getState();

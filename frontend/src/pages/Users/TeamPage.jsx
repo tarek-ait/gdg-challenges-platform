@@ -31,11 +31,10 @@ const TeamPage = () => {
   console.log('Team data:', team); // Debugging the team data after it's fetched
 
   return (
-    <div className="bg-base-200 min-h-screen py-10">
+    <div className="bg-base-200 min-h-screen py-28">
       <div className="team-info flex items-center justify-center flex-col">
         <h1>Welcome to the team {teamId} space</h1>
-        <p>Here you can work with your team members on projects and tasks.</p>
-        <h1 className="my-20">Members</h1>
+        <h1 className="my-10">Members</h1>
 
         {/* Check for team members before rendering the table */}
         {team?.team_info?.members?.length > 0 ? (
@@ -59,7 +58,7 @@ const TeamPage = () => {
                       <div className="flex items-center gap-3">
                         <div className="avatar">
                           <div className="mask mask-squircle h-12 w-12">
-                            <img src="../../../public/avatar.jpg" />
+                            <img src="/avatar.jpg" />
                           </div>
                         </div>
                       </div>

@@ -115,7 +115,6 @@ export const useTeamsStore = create((set) => ({
           Authorization: `Token ${token}`,
         },
       });
-      console.log(response.data);
       set({ team: response.data });
     } catch (error) {
       const errorMessage = error.response?.data?.error || 'Failed to get team info';

@@ -13,11 +13,12 @@ const ChallengePreviewPage = () => {
   useEffect(() => {
     if (challenges.length === 0) {
       getChallenges();
-    } else {
-      const foundChallenge = challenges.find((challenge) => challenge.id === parseInt(id));
-      setChallenge(foundChallenge);
-    }
+    } 
+    const foundChallenge = challenges.find((challenge) => challenge.id === parseInt(id));
+    setChallenge(foundChallenge);
+    
   }, [challenges, id, getChallenges]);
+
 
   if (!challenge) {
     return (
@@ -27,11 +28,10 @@ const ChallengePreviewPage = () => {
     );
   }
 
-  console.log(challenge);
   const resources = challenge.resources ? challenge.resources.split(',') : [];
 
   return (
-    <div className="bg-base-200 min-h-screen p-10 py-20 flex items-start flex-col">
+    <div className="bg-base-200 min-h-screen p-10 py-44 flex items-start flex-col">
       <h1 className="text-3xl font-bold mb-4">{challenge.title}</h1>
       <p className="text-lg mb-4">{challenge.description}</p>
       <p className="text-sm text-gray-600">Category: {challenge.category}</p>

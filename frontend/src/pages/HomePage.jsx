@@ -12,8 +12,11 @@ const HomePage = () => {
           <h1 className="text-5xl font-bold">Hello there!</h1>
           <p className="py-6 ">
             Welcome to the GDG-Algiers Challenges platform, and congratulations on participating in the hackathon!
-            we are glad to have you here with us, please sign in with your account and if you dont have one,
-            WHAT ARE YOU WAITING TO CREATE ONE!
+            we are glad to have you here with us
+            {!user && <span>
+              please sign in with your account and if you dont have one,
+              WHAT ARE YOU WAITING TO CREATE ONE!
+            </span>}
           </p>
           {!user &&
             <Link to="/login">
