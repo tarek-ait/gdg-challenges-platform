@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useAuthStore } from '../../store/useAuthStore';
 import { useTeamsStore } from '../../store/useTeamsStore';
+import { useSubmissionsStore } from '../../store/useSubmissionsStore';
 import { Loader, ShieldHalf, Video, Link } from 'lucide-react';
 
 
@@ -8,19 +9,30 @@ const SubmissionPage = () => {
   const { user, teamId } = useAuthStore();
   const { team, getTeamInfo } = useTeamsStore();
   const [isEditing, setIsEditing] = useState(false);
-  const [submissionData, setSubmissionData] = useState({});
-
+  const [submissionData, setSubmissionData] = useState({
+    videoUrl: '',
+    frontendRepo: '',
+    backendRepo: '',
+  });
+  const { submit, isSubmitting, updateSubmission, isUpdating } = useSubmissionsStore();
   // If the team has an assigned challenge, then we get the challenge from the challenges array
 
   useEffect(() => {
     async function fetchData() {
       await getTeamInfo(teamId);
     }
-
     fetchData();
+  }, [teamId, getTeamInfo]);
 
-
-  }, [teamId,  getTeamInfo]);
+  useEffect(() => {
+    if (team && team?.team_info?.submission) {
+      setSubmissionData({
+        videoUrl: team?.team_info?.submission.video_url,
+        frontendRepo: team?.team_info?.submission.resources_links.split(',')[0],
+        backendRepo: team?.team_info?.submission.resources_links.split(',')[1],
+      });
+    }
+  }, [team]);
 
   const handleEditToggle = () => {
     setIsEditing(!isEditing);
@@ -34,12 +46,28 @@ const SubmissionPage = () => {
     }));
   };
 
-  const handleSave = () => {
-    // Update the submission data in the team object or make an API call to save the changes
+  const handleSave = async () => {
+    // call the update function, but first we create a data object,that has the submission_id and the video_ur
+    // the resources are concatinated and seperated between a comma
+    const data = {
+      submissionId: team.team_info.submission.id,
+      videoUrl: submissionData.videoUrl,
+      resourcesLinks: `${submissionData.frontendRepo},${submissionData.backendRepo}`,
+    };
+    await updateSubmission(data);
     setIsEditing(false);
   };
 
-  console.log('Team data:', team);
+  const handleSubmit = () => {
+    const data = {
+      teamId: teamId,
+      challengeId: team.team_info.challenge.id,
+      videoUrl: submissionData.videoUrl,
+      resourcesLinks: `${submissionData.frontendRepo},${submissionData.backendRepo}`,
+    };
+    console.log(data);
+    submit(data);
+  };
 
   if (!team || !team?.team_info?.members?.length) {
     return (
@@ -49,90 +77,108 @@ const SubmissionPage = () => {
     );
   }
 
+
+  let parsedUser;
+
+  try {
+    parsedUser = JSON.parse(user);
+  } catch (error) {
+    console.error('Failed to parse user JSON:', error);
+  }
+
+
   return (
     <div className="bg-base-200 min-h-screen  py-10">
       <div className="min-h-screen pt-20">
-        <div className="max-w-2xl mx-auto p-4 py-8">
-          {team.team_info?.submission && (
-            <div className="bg-base-300 rounded-xl p-6 space-y-8">
-              <div className="text-center">
-                <h1 className="text-2xl font-semibold">Submission Details</h1>
+      { team.team_info?.challenge && (
+          <div className="max-w-2xl mx-auto p-4 py-8">
+       
+          <div className="bg-base-300 rounded-xl p-6 space-y-8">
+            <div className="text-center">
+              <h1 className="text-2xl font-semibold">Submission Details</h1>
+            </div>
+            <div className="flex flex-col items-center gap-4">
+              <div className="relative">
               </div>
-              <div className="flex flex-col items-center gap-4">
-                <div className="relative">
+            </div>
+            {/* user info section */}
+            <div className="space-y-6">
+              <div className="space-y-1.5">
+                <div className="text-5m text-zinc-400 flex items-center gap-2">
+                  <ShieldHalf className="w-4 h-4" />
+                  team Name
                 </div>
+                <p className="px-4 py-2.5 bg-base-200 rounded-lg border">{team.team_info.team_name}</p>
               </div>
-              {/* user info section */}
-              <div className="space-y-6">
-                <div className="space-y-1.5">
+
+
+              <div className="contaner-names flex gap-4 min-w-full justify-between">
+                <div className="space-y-1.5 flex-1">
                   <div className="text-5m text-zinc-400 flex items-center gap-2">
-                    <ShieldHalf className="w-4 h-4" />
-                    team Name
+                    <Video className="w-4 h-4" />
+                    Video Url of the Demo
                   </div>
-                  <p className="px-4 py-2.5 bg-base-200 rounded-lg border">{ }</p>
+                  <input
+                    type="text"
+                    name="videoUrl"
+                    value={submissionData.videoUrl || '' }
+                    onChange={handleChange}
+                    disabled={!isEditing && team?.team_info?.submission}
+                    className="px-4 py-2.5 bg-base-200 rounded-lg border w-full"
+                  />
                 </div>
 
-
-                <div className="contaner-names flex gap-4 min-w-full justify-between">
-                  <div className="space-y-1.5 flex-1">
-                    <div className="text-5m text-zinc-400 flex items-center gap-2">
-                      <Video className="w-4 h-4" />
-                      Video Url of the Demo
-                    </div>
-                    <input
-                      type="text"
-                      name="video_url"
-                      value={submissionData.video_url || ''}
-                      onChange={handleChange}
-                      disabled={!isEditing}
-                      className="px-4 py-2.5 bg-base-200 rounded-lg border w-full"
-                    />
-                  </div>
-
-                </div>
-                <div className="contaner-names flex gap-4 min-w-full justify-between">
-                  <div className="space-y-1.5 flex-1">
-                    <div className="text-5m text-zinc-400 flex items-center gap-2">
-                      <Link className="w-4 h-4" />
-                      github frontend repo
-                    </div>
-                    <input
-                      type="text"
-                      name="video_url"
-                      value={submissionData.frontendRepo || ''}
-                      onChange={handleChange}
-                      disabled={!isEditing}
-                      className="px-4 py-2.5 bg-base-200 rounded-lg border w-full"
-                    />
-                  </div>
-
-                </div>
-                <div className="contaner-names flex gap-4 min-w-full justify-between">
-                  <div className="space-y-1.5 flex-1">
-                    <div className="text-5m text-zinc-400 flex items-center gap-2">
-                      <Link className="w-4 h-4" />
-                      github backend repo
-                    </div>
-                    <input
-                      type="text"
-                      name="video_url"
-                      value={submissionData.backendRepo || ''}
-                      onChange={handleChange}
-                      disabled={!isEditing}
-                      className="px-4 py-2.5 bg-base-200 rounded-lg border w-full"
-                    />
-                  </div>
-
-                </div>
               </div>
-              {team?.team_leader?.username === user?.username && (
-                <div className="flex justify-end space-x-4 mt-6">
-                  {isEditing ? (
+              <div className="contaner-names flex gap-4 min-w-full justify-between">
+                <div className="space-y-1.5 flex-1">
+                  <div className="text-5m text-zinc-400 flex items-center gap-2">
+                    <Link className="w-4 h-4" />
+                    github frontend repo
+                  </div>
+                  <input
+                    type="text"
+                    name="frontendRepo"
+                    value={submissionData.frontendRepo || '' }
+                    onChange={handleChange}
+                    disabled={!isEditing && team?.team_info?.submission }
+                    className="px-4 py-2.5 bg-base-200 rounded-lg border w-full"
+                  />
+                </div>
+
+              </div>
+              <div className="contaner-names flex gap-4 min-w-full justify-between">
+                <div className="space-y-1.5 flex-1">
+                  <div className="text-5m text-zinc-400 flex items-center gap-2">
+                    <Link className="w-4 h-4" />
+                    github backend repo
+                  </div>
+                  <input
+                    type="text"
+                    name="backendRepo"
+                    value={submissionData.backendRepo || ''}
+                    onChange={handleChange}
+                    disabled={!isEditing && team?.team_info?.submission}
+                    className="px-4 py-2.5 bg-base-200 rounded-lg border w-full"
+                  />
+                </div>
+
+              </div>
+            </div>
+            {team?.team_info.team_leader === parsedUser.username && (
+              <div className="flex justify-end space-x-4 mt-6">
+                {team?.team_info?.submission ? (
+                  isEditing ? (
                     <button
                       onClick={handleSave}
                       className="px-4 py-2 bg-green-500 text-white rounded-md"
                     >
-                      Save
+                      {isUpdating ? (
+                        <>
+                          <Loader className="size-5 animate-spin"/>
+                        </>
+                      ) : (
+                        "Save"
+                      )}
                     </button>
                   ) : (
                     <button
@@ -141,15 +187,30 @@ const SubmissionPage = () => {
                     >
                       Edit Submission
                     </button>
-                  )}
-                </div>
-              )}
-            </div>
-          )}
-          {!team.team_info.submission && (
-            <h1>there is no challenge assigned to the team for now, please try again</h1>
-          )}
+                  )
+                ) : (
+                  <button
+                    onClick={handleSubmit}
+                    className="px-4 py-2 bg-blue-500 text-white rounded-md"
+                  >
+                    {isSubmitting ? (
+                      <>
+                        <Loader className="size-5 animate-spin"/>
+                      </>
+                    ) : (
+                      "Submit"
+                    )}
+                  </button>
+                )}
+              </div>
+            )}
+          </div>
         </div>
+        )}
+        {!team.team_info.challenge && (
+          <h1>there is no challenge assigned to the team for now, please try again</h1>
+        )}
+        
       </div>
     </div>
   );

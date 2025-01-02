@@ -130,15 +130,15 @@ def team_space_info(request,team_id):
     # Get the challenge and submission objects using their respective ids
     challenge = None
     submission = None
-    if team.challenge_id:
+    if team.challenge:
         try:
-            challenge = Challenge.objects.get(id=team.challenge_id)
+            challenge = Challenge.objects.get(id=team.challenge.id)
         except Challenge.DoesNotExist:
             return JsonResponse({'error': 'Challenge not found'}, status=404)
 
-    if team.submission_id:
+    if team.submission:
         try:
-            submission = Submission.objects.get(id=team.submission_id.id)
+            submission = Submission.objects.get(id=team.submission.id)
         except Submission.DoesNotExist:
             return JsonResponse({'error': 'Submission not found'}, status=404)
 

@@ -15,8 +15,9 @@ const TeamPage = () => {
   }, [teamId, getTeamInfo])
   const navigate = useNavigate();
 
-  const exit = () => {
-    leaveTeam(navigate);
+  const exit = async () => {
+    await leaveTeam(navigate);
+    navigate("/");
   }
 
   if (!team || !team?.team_info?.members?.length) {
@@ -80,7 +81,7 @@ const TeamPage = () => {
           <div className="text-center">No members available</div>
         )}
 
-        <h1>Assigned Challenge</h1>
+        <h1>Assigned Challenge: {team?.team_info?.challenge?.id}</h1>
         <h1>Team Submission Details</h1>
 
         <h1>Leave the team</h1>

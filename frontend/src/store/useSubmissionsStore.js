@@ -29,6 +29,7 @@ export const useSubmissionsStore = create((set) => ({
                 video_url: data.videoUrl,
                 resources_links: data.resourcesLinks,
             };
+            console.log(requestData);
             const response = await axiosInstance.post("submissions/add/", requestData, {
                 headers: {
                     Authorization: `Token ${token}`,
@@ -79,7 +80,8 @@ export const useSubmissionsStore = create((set) => ({
                 video_url: data.videoUrl,
                 resources_links: data.resourcesLinks,
             };
-            const response = await axiosInstance.post("submissions/update/", requestData, {
+            console.log(requestData);
+            const response = await axiosInstance.put("submissions/update/", requestData, {
                 headers: {
                     Authorization: `Token ${token}`,
                 },

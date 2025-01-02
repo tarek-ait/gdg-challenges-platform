@@ -65,8 +65,8 @@ def add_submission(request):
 
         # Create the submission
         submission = Submission.objects.create(
-            team_id=team,          # Correct field name: team_id
-            challenge_id=challenge,  # Correct field name: challenge_id
+            team=team,          # Correct field name: team_id
+            challenge=challenge,  # Correct field name: challenge_id
             video_url=video_url,
             resources_links=resources_links
         )
@@ -183,7 +183,7 @@ def update_submission(request):
         return JsonResponse({'error': 'Submission does not exist.'}, status=404)
 
     # Check if the user is the leader of the team associated with the submission
-    if submission.team_id.team_leader != user:
+    if submission.team.team_leader != user:
         return JsonResponse({'error': 'Permission denied. Only the team leader can update this submission.'}, status=403)
 
     # Update fields if provided

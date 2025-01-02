@@ -36,14 +36,17 @@ const ChallengesPage = () => {
     }
   }, [challenges, getChallenges]);
 
+  if (isGettingChallenges) {
+    return (
+      <div className="loader-container flex justify-center items-center h-96">
+        <Loader className="size-5 animate-spin" />
+      </div>
+    );
+  }
+  
 
   return (
     <div className="challenges-container p-5 py-20 bg-base-200 min-h-screen">
-      {isGettingChallenges &&
-        <div className="loader-container flex justify-center items-center min-h-screen">
-          <Loader className="size-5 animate-spin" />
-        </div>
-      }
       {!isGettingChallenges &&
         (
           <div className="challenges-container py-20">
