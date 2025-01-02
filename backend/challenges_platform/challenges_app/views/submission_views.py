@@ -42,7 +42,7 @@ def add_submission(request):
         team_id = data.get('team_id')
         challenge_id = data.get('challenge_id')
         video_url = data.get('video_url')
-        resources_links = data.get('resources_links')
+        resources_links = data.get('resources_links') # the repos urls 
 
         if not team_id or not challenge_id or not video_url or not resources_links:
             return JsonResponse({'error': 'Missing required fields: team_id, challenge_id, video_url, resources_links.'}, status=400)
@@ -80,8 +80,8 @@ def add_submission(request):
             'message': 'Submission successfully added!',
             'submission_id': submission.id,
             'submission_data': {
-                'team': submission.team_id.id,  # Correctly use the foreign key reference
-                'challenge': submission.challenge_id.id,
+                'team': submission.team.id,  # Correctly use the foreign key reference
+                'challenge': submission.challenge.id,
                 'video_url': submission.video_url,
                 'resources_links': submission.resources_links,
             }

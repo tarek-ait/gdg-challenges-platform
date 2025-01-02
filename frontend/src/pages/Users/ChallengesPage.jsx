@@ -77,6 +77,9 @@ const ChallengesPage = () => {
                     <th scope="col" className="px-6 py-3">
                       Deadline
                     </th>
+                    <th scope="col" className="px-6 py-3">
+
+                    </th>
                   </tr>
                 </thead>
                 <tbody>
@@ -90,9 +93,7 @@ const ChallengesPage = () => {
                         </div>
                       </td>
                       <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                        <Link to={`/challenge-preview/${challenge.id}`} className="text-blue-600 hover:underline">
-                          {challenge.title}
-                        </Link>
+                        {challenge.title}
                       </th>
                       <td className="px-6 py-4">
                         {challenge.category}
@@ -106,6 +107,11 @@ const ChallengesPage = () => {
                       <td className="px-6 py-4">
                         {formatDate(challenge.deadline)}
                       </td>
+                      <th>
+                        <Link to={`/challenge-preview/${challenge.id}`} className="text-blue-600 hover:underline">
+                          <button className="btn btn-ghost btn-xs">details</button>
+                        </Link>
+                      </th>
                     </tr>
                   ))}
                 </tbody>

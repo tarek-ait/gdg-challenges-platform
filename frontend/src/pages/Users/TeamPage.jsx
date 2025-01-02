@@ -20,13 +20,13 @@ const TeamPage = () => {
   }
 
   if (!team || !team?.team_info?.members?.length) {
-    console.log('Team is loading, showing loader...');
     return (
       <div className="loader-container flex justify-center items-center h-96">
         <Loader className="size-5 animate-spin" />
       </div>
     );
   }
+  
 
   console.log('Team data:', team); // Debugging the team data after it's fetched
 

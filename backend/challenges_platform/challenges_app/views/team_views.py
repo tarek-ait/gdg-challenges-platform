@@ -174,8 +174,8 @@ def team_space_info(request,team_id):
     if submission:
         team_info['submission'] = {
             'id': submission.id,
-            'team_id': submission.team_id.id,
-            'challenge_id': submission.challenge_id.id,
+            'team_id': submission.team.id,
+            'challenge_id': submission.challenge.id,
             'video_url': submission.video_url,
             'resources_links': submission.resources_links,
         }
