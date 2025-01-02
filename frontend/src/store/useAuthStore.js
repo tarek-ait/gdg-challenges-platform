@@ -100,6 +100,4 @@ export const useAuthStore = create((set) => ({
     });
     toast.success("Logged out successfully!");
   },
-
-
 }));

@@ -39,7 +39,6 @@ export const useChallengesStore = create((set) => ({
     hasNext: false,
     hasPrevious: false,
 
-
     getChallenges: async () => {
         const {token} = useAuthStore.getState();
         set({isGettingChallenges: true})
