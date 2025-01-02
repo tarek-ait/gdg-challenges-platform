@@ -94,8 +94,9 @@ def add_submission(request):
 @api_view(['DELETE'])
 def delete_submission(request):
     # Extract the Authorization header
+    print('All headers:', request.headers)
     auth_header = request.headers.get('Authorization')
-
+    print('this is the auth header',auth_header)
     # Check if Authorization header exists and is correctly formatted
     token_key = auth_header.split(' ')[1] if auth_header and auth_header.startswith('Token ') else None
     if not token_key:
@@ -130,7 +131,7 @@ def delete_submission(request):
         return JsonResponse({'error': 'Submission does not exist.'}, status=404)
 
     # Check if the user is the leader of the team associated with the submission
-    if submission.team_id.team_leader != user:
+    if submission.team.team_leader != user:
         return JsonResponse({'error': 'Permission denied. Only the team leader can delete this submission.'}, status=403)
 
     # Delete the submission
@@ -209,8 +210,9 @@ def update_submission(request):
 @csrf_exempt
 def get_submissions(request):
     # Extract the Authorization header
-    auth_header = request.headers.get('Authorization')
     
+    auth_header = request.headers.get('Authorization')
+
     # Check if Authorization header exists and is properly formatted
     if not auth_header or not auth_header.startswith('Token '):
         return JsonResponse({'error': 'Authentication required.'}, status=401)

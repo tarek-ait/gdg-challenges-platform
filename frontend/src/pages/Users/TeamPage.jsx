@@ -26,7 +26,7 @@ const TeamPage = () => {
         <Loader className="size-5 animate-spin" />
       </div>
     );
-  }
+  } 
   
 
   console.log('Team data:', team); // Debugging the team data after it's fetched
