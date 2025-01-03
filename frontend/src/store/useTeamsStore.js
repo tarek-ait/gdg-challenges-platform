@@ -20,7 +20,8 @@ export const useTeamsStore = create((set) => ({
   isLeavingTeam: false,
   teamInfo: null,
   isFetchingTeamInfo: false,
-
+  teams:[],
+  isGettingTeams: false,
   createTeam: async (data, navigate) => {
     set({ isCreatingTeam: true });
     const { token } = useAuthStore.getState();
@@ -123,4 +124,23 @@ export const useTeamsStore = create((set) => ({
       set({ isFetchingTeamInfo: false });
     }
   },
+  // get all the teams for the admin
+  getTeams: async () => {
+    const { token } = useAuthStore.getState();
+    set({ isGettingTeams: true });
+    try {
+      const response = await axiosInstance.get('teams/', {
+        headers: {
+          Authorization: `Token ${token}`,
+        },
+      });
+      set({ teams: response.data });
+    } catch (error) {
+      const errorMessage = error.response?.data?.error || 'Failed to get teams';
+      toast.error(errorMessage);
+    } finally {
+      set({ isGettingTeams: false });
+    }
+  },
+
 }));

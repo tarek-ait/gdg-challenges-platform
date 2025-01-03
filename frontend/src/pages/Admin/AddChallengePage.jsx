@@ -1,5 +1,5 @@
 
-const AddChallenge = () => {
+const AddChallengePage = () => {
   return (
     <div className="bg-base-200 min-h-screen">
         adding a challenge page
@@ -7,4 +7,4 @@ const AddChallenge = () => {
   )
 }
 
-export default AddChallenge
+export default AddChallengePage

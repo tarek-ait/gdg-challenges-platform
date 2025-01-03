@@ -2,7 +2,8 @@ from .team_views import (
     create_team, 
     team_space_info, 
     join_team,
-    leave_team
+    leave_team,
+    get_teams
 )
 
 from .challenge_views import (
@@ -24,7 +25,8 @@ from .auth_views import (
     signup,
     login,
     test_token,
-    admin_login
+    admin_login,
+    get_users
 )
 __all__ = [
     'create_team', 
@@ -43,5 +45,7 @@ __all__ = [
     'signup',
     'login',
     'admin_login',
-    'test_token'
+    'test_token',
+    'get_users',
+    'get_teams'
 ]

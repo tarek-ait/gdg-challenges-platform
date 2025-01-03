@@ -4,8 +4,13 @@ import { useAuthStore } from '../store/useAuthStore';
 
 const NavBar = () => {
 
-    const { user, logout, teamId } = useAuthStore();
+    const { user, logout, teamId, isAdmin } = useAuthStore();
 
+    const handleLogout = async () => {
+        await logout();
+      };
+
+      
     return (
         <div className="navbar bg-base-100 px-6 shadow-md fixed z-50 top-0">
             <div className="navbar-start">
@@ -27,13 +32,22 @@ const NavBar = () => {
                     <ul
                         tabIndex={0}
                         className="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow">
-                        {user && (
+                        {(user && !isAdmin) && (
                             <>
                                 <Link to={"/challenges"} className='btn'>Challenges</Link>
                                 <Link to={teamId !== null && teamId !== undefined ? `/team/${teamId}` : "/join-team"} className="btn">Team</Link>
                                 <Link to={"/submission"} className='btn'>Submission</Link>
                             </>
                         )}
+                        {user && isAdmin && (
+                            <>
+                                <Link to={"/admin/users"} className='btn'>Users</Link>
+                                <Link to={"/admin/teams"} className="btn">Teams</Link>
+                                <Link to={"/admin/submissions"} className='btn'>Submissions</Link>
+                                <Link to={"/challenges"} className='btn'>Challenges</Link>
+                            </>
+                        )}
+
                     </ul>
                 </div>
                 <Link to={"/"} className="btn btn-ghost text-xl">
@@ -43,17 +57,25 @@ const NavBar = () => {
             </div>
             <div className="navbar-center hidden lg:flex">
                 <ul className="menu menu-horizontal px-1 gap-3">
-                    {user && (
+                    {user && !isAdmin && (
                         <>
                             <Link to={"/challenges"} className='btn'>Challenges</Link>
                             <Link to={teamId !== null && teamId !== undefined ? `/team/${teamId}` : "/join-team"} className="btn">Team</Link>
                             <Link to={"/submission"} className='btn'>Submission</Link>
                         </>
                     )}
+                    {user && isAdmin && (
+                        <>
+                            <Link to={"/admin/users"} className='btn'>Users</Link>
+                            <Link to={"/admin/teams"} className="btn">Teams</Link>
+                            <Link to={"/admin/submissions"} className='btn'>Submissions</Link>
+                            <Link to={"/challenges"} className='btn'>Challenges</Link>
+                        </>
+                    )}
                 </ul>
             </div>
             <div className="navbar-end gap-5">
-                {user && (
+                {user && !isAdmin && (
                     <>
                         <Link to={"/profile"} className='flex gap-1 items-center justify-center'>
                             <User className="size-5"></User>
@@ -68,7 +90,14 @@ const NavBar = () => {
                         </Link>
 
                     </>
-                    // we will leave the settings option inside the profile page.
+                )}
+                {isAdmin && user && (
+                <Link to={"/"}>
+                    <button className="flex gap-1.5 items-center justify-center" onClick={handleLogout}>
+                        <LogOut className="size-5"></LogOut>
+                        <span className="hidden sm:inline">Logout</span>
+                    </button>
+                </Link>
                 )}
                 {!user && (
                     <>

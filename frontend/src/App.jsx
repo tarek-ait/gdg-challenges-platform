@@ -4,7 +4,7 @@ import UsersPage from './pages/Admin/UsersPage.jsx'
 import TeamsPage from './pages/Admin/TeamsPage.jsx'
 import SubmissionsPage from './pages/Admin/SubmissionsPage.jsx'
 import AdminLoginPage from './pages/Admin/AdminLoginPage.jsx'
-import AddChallenge from './pages/Admin/AddChallenge.jsx'
+import AddChallengePage from './pages/Admin/AddChallengePage.jsx'
 import ProfilePage from './pages/Users/ProfilePage.jsx'
 import TeamPage from './pages/Users/TeamPage.jsx'
 import SubmissionPage from './pages/Users/SubmissionPage.jsx'
@@ -25,7 +25,7 @@ import CreatTeamPage from './pages/Users/CreateTeamPage.jsx'
 
 function App() {
 
-  const { user,  checkAuth, isCheckingAuth } = useAuthStore();
+  const { user,  checkAuth, isCheckingAuth, isAdmin } = useAuthStore();
   const { team } = useTeamsStore();
 
   useEffect(() => {
@@ -48,11 +48,11 @@ function App() {
         <div className="min-h-screen">
           <Routes>
             <Route path="/" element={<HomePage />} />
-            <Route path="/admin/users" element={user ? <UsersPage /> : <Navigate to="/login" />} />
-            <Route path="/admin/teams" element={user ? <TeamsPage /> : <Navigate to="/login" />} />
-            <Route path="/admin/submissions" element={user ? <SubmissionsPage /> : <Navigate to="/login" />} />
+            <Route path="/admin/users" element={isAdmin ? <UsersPage /> : <Navigate to="/login" />} />
+            <Route path="/admin/teams" element={isAdmin ? <TeamsPage /> : <Navigate to="/login" />} />
+            <Route path="/admin/submissions" element={isAdmin ? <SubmissionsPage /> : <Navigate to="/login" />} />
             <Route path="/admin/login" element={!user ? <AdminLoginPage /> : <Navigate to="/" />} />
-            <Route path="/admin/add-challenge" element={user ? <AddChallenge /> : <Navigate to="/login" />} />
+            <Route path="/admin/add-challenge" element={user ? <AddChallengePage /> : <Navigate to="/login" />} />
             <Route path="/profile" element={user ? <ProfilePage /> : <Navigate to="/login" />} />
             <Route
               path="/team/:teamId"

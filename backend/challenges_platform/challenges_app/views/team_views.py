@@ -8,6 +8,8 @@ from django.contrib.auth.hashers import make_password, check_password
 from django.core.exceptions import ObjectDoesNotExist
 from rest_framework.authtoken.models import Token
 from django.shortcuts import get_object_or_404
+from rest_framework.decorators import api_view
+from rest_framework import status
 
 
 
@@ -282,3 +284,42 @@ def leave_team(request):
         return JsonResponse({'message': f'You have successfully left the team {team.name}.'}, status=200)
 
     return JsonResponse({'error': 'Invalid request method. Only POST is allowed.'}, status=405)
+
+#  function to get all the teams
+@api_view(['GET'])
+def get_teams(request):
+    # Extract the Authorization header
+    auth_header = request.headers.get('Authorization')
+    print('This is the auth header:', auth_header)
+
+    # Check if Authorization header exists and is correctly formatted
+    token_key = auth_header.split(' ')[1] if auth_header and auth_header.startswith('Token ') else None
+    if not token_key:
+        return JsonResponse({'error': 'Invalid or missing token.'}, status=status.HTTP_401_UNAUTHORIZED)
+
+    # Validate token and get the associated user
+    try:
+        token = Token.objects.get(key=token_key)
+        user = token.user
+    except Token.DoesNotExist:
+        return JsonResponse({'error': 'Invalid or expired token.'}, status=status.HTTP_401_UNAUTHORIZED)
+
+    # Check if the user is a superuser (admin)
+    if not user.is_superuser:
+        return JsonResponse({'error': 'You must be an admin to access this resource.'}, status=status.HTTP_403_FORBIDDEN)
+
+    try:
+        teams = Team.objects.all()
+        team_data = []
+        for team in teams:
+            team_data.append({
+                'id': team.id,
+                'name': team.name,
+                'submission': team.submission.id if team.submission else None,
+                'challenge': team.challenge.id if team.challenge else None,
+                'team_leader': team.team_leader.username,
+            })
+
+        return JsonResponse(team_data, safe=False, status=status.HTTP_200_OK)
+    except Exception as e:
+        return JsonResponse({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)

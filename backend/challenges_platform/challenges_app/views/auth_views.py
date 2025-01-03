@@ -83,6 +83,52 @@ def login(request):
 def test_token(request):
     return Response("passed!")
 
+@api_view(['GET'])
+def get_users(request):
+    # Extract the Authorization header
+    auth_header = request.headers.get('Authorization')
+    print('This is the auth header:', auth_header)
+
+    # Check if Authorization header exists and is correctly formatted
+    token_key = auth_header.split(' ')[1] if auth_header and auth_header.startswith('Token ') else None
+    if not token_key:
+        return Response({'error': 'Invalid or missing token.'}, status=status.HTTP_401_UNAUTHORIZED)
+
+    # Validate token and get the associated user
+    try:
+        token = Token.objects.get(key=token_key)
+        user = token.user
+    except Token.DoesNotExist:
+        return Response({'error': 'Invalid or expired token.'}, status=status.HTTP_401_UNAUTHORIZED)
+
+    # Check if the user is a superuser (admin)
+    if not user.is_superuser:
+        return Response({'error': 'You must be an admin to access this resource.'}, status=status.HTTP_403_FORBIDDEN)
+
+    try:
+        users = User.objects.all()
+        user_data = []
+        for user in users:
+            try:
+                user_profile = UserProfile.objects.get(user=user)
+                phone_number = user_profile.phone_number
+            except UserProfile.DoesNotExist:
+                phone_number = None
+
+            user_data.append({
+                'id': user.id,
+                'first_name': user.first_name,
+                'last_name': user.last_name,
+                'username': user.username,
+                'email': user.email,
+                'phone_number': phone_number,
+                'is_superuser': user.is_superuser,
+            })
+
+        return Response(user_data, status=status.HTTP_200_OK)
+    except Exception as e:
+        return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    
 @api_view(['POST'])
 def admin_login(request):
     try:
@@ -122,6 +168,7 @@ def admin_login(request):
 
 
 # this functions are all working  
+# get all the users 
 
 # the superuser 
 # username= tarek2005

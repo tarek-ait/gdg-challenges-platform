@@ -37,6 +37,10 @@ urlpatterns = [
     re_path('login_admin/', views.admin_login),
     # create a new team (POST request)
     re_path('signup/', views.signup),
+    #  get all the users 
+    re_path('users/', views.get_users),
+    # get all teams
+    re_path('teams/', views.get_teams),
     # testing a token 
     re_path('', views.test_token),
 ]

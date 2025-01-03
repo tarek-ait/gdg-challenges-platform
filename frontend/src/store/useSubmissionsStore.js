@@ -16,6 +16,8 @@ export const useSubmissionsStore = create((set) => ({
   isUpdating: false,
   deleted: false,
   isDeleting: false,
+  submissions: [],
+  isGettingSubmissions: false,
 
   submit: async (data) => {
     set({ isSubmitting: true });
@@ -78,14 +80,14 @@ export const useSubmissionsStore = create((set) => ({
         },
       });
       //  updating the team in the useTeamStore
-        const updatedTeam = {
-            ...team,
-            team_info: {
-            ...team.team_info,
-            submission: null,
-            },
-        };
-        setTeam(updatedTeam);
+      const updatedTeam = {
+        ...team,
+        team_info: {
+          ...team.team_info,
+          submission: null,
+        },
+      };
+      setTeam(updatedTeam);
       toast.success(response.data.message);
     } catch (error) {
       const errorMessage =
@@ -138,6 +140,29 @@ export const useSubmissionsStore = create((set) => ({
     }
     set({ isUpdating: false });
   },
-
-  // the get submissions for the admin we will do it later on
+  // function to get the submissions for the admin
+  getSubmissions: async () => {
+    set({ isGettingSubmissions: true });
+    const { token } = useAuthStore.getState();
+    try {
+      const response = await axiosInstance.get("submissions/", {
+        headers: {
+          Authorization: `Token ${token}`,
+        },
+      });
+      set({
+        submissions: response.data.submissions,
+        totalPages: response.data.total_pages,
+        hasNext: response.data.has_next,
+        hasPrevious: response.data.has_previous,
+      });
+      console.log(response.data);
+    } catch (error) {
+      const errorMessage =
+        error.response?.data?.error ||
+        "An error occurred while fetching the submissions.";
+      toast.error(errorMessage);
+    }
+    set({ isGettingSubmissions: false });
+  },
 }));
