@@ -95,6 +95,8 @@ export const useTeamsStore = create((set) => ({
       );
       localStorage.setItem("teamId", null);
       set({ teamLeft: response.data });
+      set({ teamId: null });
+      set({ team: null });
       toast.success("Team left successfully!");
       navigate("/");
     } catch (error) {

@@ -27,7 +27,6 @@ function App() {
 
   const { user,  checkAuth, isCheckingAuth, isAdmin } = useAuthStore();
   const { team } = useTeamsStore();
-
   useEffect(() => {
     checkAuth();
   }, [checkAuth, user]);
