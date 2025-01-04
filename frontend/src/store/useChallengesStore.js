@@ -26,8 +26,7 @@ import { create } from "zustand";
 import toast from "react-hot-toast";
 import { axiosInstance } from "../lib/axios";
 import { useAuthStore } from "./useAuthStore.js";
-
-
+import { useTeamsStore } from "./useTeamsStore.js";
 
 export const useChallengesStore = create((set) => ({
     challenges:[],
@@ -39,6 +38,7 @@ export const useChallengesStore = create((set) => ({
     totalPages: 1,
     hasNext: false,
     hasPrevious: false,
+    isAssigningChallenge: false,
 
     getChallenges: async () => {
         const {token} = useAuthStore.getState();
@@ -129,7 +129,42 @@ export const useChallengesStore = create((set) => ({
             set({ isUpdatingChallenge: false })
         }
     },
-    // todo: add a new challenge by the admin
-    
+    // todo: add a new challenge by the admin,
+    // asign challenge
+    assignChallenge: async (challengeId, teamId) => {
+        const {token} = useAuthStore.getState();
+        set({isAssigningChallenge: true})
+        try {
+            const response = await axiosInstance.put(`challenges/assign/`,{
+                challenge_id: challengeId,
+                team_id: teamId
+            },{
+                headers: {
+                    Authorization: `Token ${token}`
+                }
+            })
+            console.log(response)
+            // update the challenge state
+            set((state) => ({
+                challenges: state.challenges.map((challenge) => {
+                    if (challenge.id === challengeId) {
+                        return {
+                            ...challenge,
+                            status: true
+                        }
+                    }
+                    return challenge
+                })
+            }))
+            // update the team state 
+            await useTeamsStore.getState().getTeams()
 
+            toast.success("Challenge assigned successfully")
+        } catch (error) {
+            const errorMessage = error.response?.data?.error || "Failed to assign challenge"
+            toast.error(errorMessage)
+        } finally {
+            set({ isAssigningChallenge: false })
+        }
+    },
 }))

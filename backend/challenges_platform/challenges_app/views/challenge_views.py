@@ -294,7 +294,10 @@ def assign_challenge(request):
     except Challenge.DoesNotExist:
         return JsonResponse({'error': 'Challenge does not exist'}, status=404)
    
-    team.challenge_id = challenge_id
+    team.challenge = challenge
+    # update the challenge status
+    challenge.status = False
+    challenge.save()
     team.save()
 
     return JsonResponse({
