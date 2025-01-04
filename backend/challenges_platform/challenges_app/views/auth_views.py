@@ -112,12 +112,14 @@ def get_users(request):
             try:
                 user_profile = UserProfile.objects.get(user=user)
                 phone_number = user_profile.phone_number
+                team_id = user_profile.team.id if user_profile.team else None
             except UserProfile.DoesNotExist:
                 phone_number = None
 
             user_data.append({
                 'id': user.id,
                 'first_name': user.first_name,
+                'team_id': team_id,
                 'last_name': user.last_name,
                 'username': user.username,
                 'email': user.email,

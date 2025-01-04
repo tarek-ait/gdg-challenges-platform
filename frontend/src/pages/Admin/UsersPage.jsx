@@ -22,8 +22,6 @@ const UsersPage = () => {
   } 
   
 
-  console.log('users:', users); // Debugging the team data after it's fetched
-
   return (
     <div className="bg-base-200 min-h-screen py-28">
       <div className="team-info flex items-center justify-center flex-col">
@@ -44,6 +42,7 @@ const UsersPage = () => {
                   <th>Last Name</th>
                   <th>Email</th>
                   <th>Phone number</th>
+                  <th>Team id</th>
                   <th>Is admin</th>
                 </tr>
               </thead>
@@ -65,6 +64,7 @@ const UsersPage = () => {
                     <td>{user.last_name}</td>
                     <td>{user.email}</td>
                     <td>{user.phone_number}</td>
+                    <td>{user.team_id ? user.team_id : "not in a team" }</td>
                     <td>{user.is_superuser ? "Admin" : "not Admin"}</td>
                   </tr>
                 ))}

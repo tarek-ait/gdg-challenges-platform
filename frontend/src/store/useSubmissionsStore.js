@@ -1,9 +1,3 @@
-//  these are the field required when submitting a challenge and also the fields for the submission table
-// # Extract fields and check if required ones are present
-// team_id = data.get('team_id')
-// challenge_id = data.get('challenge_id')
-// video_url = data.get('video_url')
-// resources_links = data.get('resources_links') # the repos urls
 import { create } from "zustand";
 import toast from "react-hot-toast";
 import { axiosInstance } from "../lib/axios.js";
@@ -30,7 +24,6 @@ export const useSubmissionsStore = create((set) => ({
         video_url: data.videoUrl,
         resources_links: data.resourcesLinks,
       };
-      console.log(requestData);
       const response = await axiosInstance.post(
         "submissions/add/",
         requestData,
@@ -109,7 +102,6 @@ export const useSubmissionsStore = create((set) => ({
         video_url: data.videoUrl,
         resources_links: data.resourcesLinks,
       };
-      console.log(requestData);
       const response = await axiosInstance.put(
         "submissions/update/",
         requestData,
@@ -156,7 +148,6 @@ export const useSubmissionsStore = create((set) => ({
         hasNext: response.data.has_next,
         hasPrevious: response.data.has_previous,
       });
-      console.log(response.data);
     } catch (error) {
       const errorMessage =
         error.response?.data?.error ||

@@ -28,6 +28,7 @@ import { axiosInstance } from "../lib/axios";
 import { useAuthStore } from "./useAuthStore.js";
 
 
+
 export const useChallengesStore = create((set) => ({
     challenges:[],
     isGettingChallenges: false,
@@ -53,7 +54,6 @@ export const useChallengesStore = create((set) => ({
                 hasNext: response.data.has_next,
                 hasPrevious: response.data.has_previous
             })
-            console.log(response.data)
         } catch (error) {
             const errorMessage = error.response?.data?.error || "Failed to get challenges"
             toast.error(errorMessage)
@@ -61,4 +61,75 @@ export const useChallengesStore = create((set) => ({
             set({ isGettingChallenges: false })
         }
     },
+    // now it remains to implement the admin challenges 
+    // the delete challenge function
+    deleteChallenge: async (challengeId, navigate) => {
+        const {token} = useAuthStore.getState();
+        set({isDeletingChallenge: true})
+        try {
+            await axiosInstance.delete(`challenges/delete/`,{
+                headers: {
+                    Authorization: `Token ${token}`
+                },
+                data: {
+                    challenge_id: challengeId
+                }
+            })
+            set((state) => ({
+                challenges: state.challenges.filter((challenge) => challenge.id !== challengeId)
+            }))
+            toast.success("Challenge deleted successfully")
+            navigate("/challenges")
+        } catch (error) {
+            const errorMessage = error.response?.data?.error || "Failed to delete challenge"
+            toast.error(errorMessage)
+        } finally {
+            set({ isDeletingChallenge: false })
+        }
+    },
+    // the update challenge function
+    updateChallenge: async (data) => {
+        const {token} = useAuthStore.getState();
+        set({isUpdatingChallenge: true})
+        try {
+            console.log(data)
+            // get the fields from the data
+            const updatedChallenge = {
+                title: data.challengeTitle,
+                category: data.challengeCategory,
+                description: data.challengeDescription,
+                resources: data.challengeResources,
+            }
+            console.log(updatedChallenge)
+            const response  = await axiosInstance.put(`challenges/update/`,{
+                challenge_id: data.challengeId,
+                ...updatedChallenge
+            },{
+                headers: {
+                    Authorization: `Token ${token}`
+                }
+            })
+            set((state) => ({
+                challenges: state.challenges.map((challenge) => {
+                    if (challenge.id === data.challengeId) {
+                        return {
+                            ...challenge,
+                            ...updatedChallenge
+                        }
+                    }
+                    return challenge
+                })
+            }))
+            console.log(response)
+            toast.success("Challenge updated successfully")
+        } catch (error) {
+            const errorMessage = error.response?.data?.error || "Failed to update challenge"
+            toast.error(errorMessage)
+        } finally {
+            set({ isUpdatingChallenge: false })
+        }
+    },
+    // todo: add a new challenge by the admin
+    
+
 }))

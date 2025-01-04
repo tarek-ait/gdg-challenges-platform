@@ -164,6 +164,7 @@ def update_challenge(request):
     # Extract fields from the request
     challenge_id = data.get('challenge_id')
     title = data.get('title')
+    category = data.get('category')
     description = data.get('description')
     resources = data.get('resources')
 
@@ -180,7 +181,8 @@ def update_challenge(request):
         challenge.description = description
     if resources:
         challenge.resources = resources
-
+    if category:
+        challenge.category = category
     # Save the updated challenge
     challenge.save()
 
@@ -190,7 +192,8 @@ def update_challenge(request):
         'challenge_data': {
             'title': challenge.title,
             'description': challenge.description,
-            'resources': challenge.resources
+            'resources': challenge.resources,
+            'category': challenge.category
         }
     }, status=200)
 

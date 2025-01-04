@@ -109,7 +109,6 @@ export const useAuthStore = create((set) => ({
   loginAdmin: async (data) => {
     set({ isLoginIn: true });
     try {
-      console.log(data);
       const response = await axiosInstance.post("login_admin/", data);
       localStorage.setItem("token", response.data.token);
       localStorage.setItem("user", JSON.stringify(response.data.user));
@@ -137,7 +136,6 @@ export const useAuthStore = create((set) => ({
         },
       });
       set({ users: response.data });
-      console.log(response.data);
     } catch (error) {
       const errorMessage = error.response?.data?.error || "Failed to get users";
       toast.error(errorMessage);
