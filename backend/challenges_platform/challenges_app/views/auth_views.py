@@ -115,6 +115,7 @@ def get_users(request):
                 team_id = user_profile.team.id if user_profile.team else None
             except UserProfile.DoesNotExist:
                 phone_number = None
+                team_id = None
 
             user_data.append({
                 'id': user.id,

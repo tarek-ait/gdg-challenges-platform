@@ -7,7 +7,7 @@ import { useState } from 'react'
 import { toast } from 'react-hot-toast'
 
 const TeamsPage = () => {
-  const { teams, getTeams , isGettingTeams, isAdmin} = useTeamsStore();
+  const { teams, getTeams, isGettingTeams, isAdmin } = useTeamsStore();
   const { challenges, getChallenges, assignChallenge } = useChallengesStore();
   const [selectedChallenge, setSelectedChallenge] = useState(null);
   const [selectedTeam, setSelectedTeam] = useState(null);
@@ -50,16 +50,20 @@ const TeamsPage = () => {
     );
   }
 
-  const availableChallenges = challenges.filter((challenge) => challenge.status);
-
+  // Show all challenges instead of filtering by status
+  const availableChallenges = challenges;
 
   // here we will add the assign challenge button to assign a challenge to a team
   return (
-    <div className="challenges-container p-5 py-20 bg-base-200 min-h-screen">
+    <div className="challenges-container p-8 py-24 bg-base-200 min-h-screen">
       {!isGettingTeams &&
         (
-          <div className="challenges-container py-20">
-            <div className="relative  overflow-x-auto  shadow-md sm:rounded-lg">
+          <div className="challenges-container py-24">
+            <div className="flex justify-between items-center mb-8">
+              <h1 className="text-3xl font-bold">Teams</h1>
+              <div></div>
+            </div>
+            <div className="relative overflow-x-auto shadow-md sm:rounded-lg p-8">
               <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                 <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                   <tr>
@@ -116,42 +120,42 @@ const TeamsPage = () => {
                         {team.submission ? team.submission : "no submission"}
                       </td>
                       <td className="px-4 py-2  w-64">
-                      <div className="flex items-center space-x-2">
-                        { (selectedTeam === team.id && !team.challenge) ? (
-                          <>
-                            <select
-                              value={selectedChallenge || ""}
-                              onChange={(e) => handleSelectChange(e.target.value)}
-                              className="px-2 py-1 bg-base-200 rounded-lg w-full outline-none"
-                            >
-                              <option value="">Select Challenge</option>
-                              {availableChallenges.map((challenge) => (
-                                <option key={challenge.id} value={challenge.id}>
-                                  {challenge.title}
-                                </option>
-                              ))}
-                            </select>
+                        <div className="flex items-center space-x-2">
+                          {(selectedTeam === team.id && !team.challenge) ? (
+                            <>
+                              <select
+                                value={selectedChallenge || ""}
+                                onChange={(e) => handleSelectChange(e.target.value)}
+                                className="px-2 py-1 bg-base-200 rounded-lg w-full outline-none"
+                              >
+                                <option value="">Select Challenge</option>
+                                {availableChallenges.map((challenge) => (
+                                  <option key={challenge.id} value={challenge.id}>
+                                    {challenge.title}
+                                  </option>
+                                ))}
+                              </select>
+                              <button
+                                onClick={handleAssignChallenge}
+                                className="ml-2 px-4 py-2 bg-blue-500 text-white rounded-md outline-none"
+                                disabled={isAssigningChallenge}
+                              >
+                                {isAssigningChallenge ? (
+                                  <Loader className="size-4 animate-spin" />
+                                ) : (
+                                  "Assign"
+                                )}
+                              </button>
+                            </>
+                          ) : (!team.challenge) && (
                             <button
-                              onClick={handleAssignChallenge}
-                              className="ml-2 px-4 py-2 bg-blue-500 text-white rounded-md outline-none"
-                              disabled={isAssigningChallenge}
+                              onClick={() => handleShowSelect(team.id)}
+                              className="px-4 py-2 bg-blue-500 text-white relative right-0 rounded-md outline-none"
                             >
-                              {isAssigningChallenge ? (
-                                <Loader className="size-4 animate-spin" />
-                              ) : (
-                                "Assign"
-                              )}
+                              Select challenge
                             </button>
-                          </>
-                        ) : ( !team.challenge ) && (
-                          <button
-                            onClick={() => handleShowSelect(team.id)}
-                            className="px-4 py-2 bg-blue-500 text-white relative right-0 rounded-md outline-none"
-                          >
-                            Select challenge
-                          </button>
-                        )}
-                      </div>
+                          )}
+                        </div>
                       </td>
                     </tr>
                   ))}

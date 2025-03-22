@@ -31,10 +31,8 @@ const SubmisionsPage = () => {
   }
 
   useEffect(() => {
-    if (!submissions || submissions.length === 0) {
-      getSubmissions();
-    }
-  }, [submissions, getSubmissions]);
+    getSubmissions();
+  }, []);
 
   if (isGettingSubmissions) {
     return (
@@ -45,11 +43,15 @@ const SubmisionsPage = () => {
   }
 
   return (
-    <div className="challenges-container p-5 py-20 bg-base-200 min-h-screen">
+    <div className="challenges-container p-8 py-24 bg-base-200 min-h-screen">
       {!isGettingSubmissions &&
         (
-          <div className="challenges-container py-20">
-            <div className="relative  overflow-x-auto  shadow-md sm:rounded-lg">
+          <div className="challenges-container py-24">
+            <div className="flex justify-between items-center mb-8">
+              <h1 className="text-3xl font-bold">Submissions</h1>
+              <div></div>
+            </div>
+            <div className="relative  overflow-x-auto  shadow-md sm:rounded-lg p-8">
               <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                 <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                   <tr>

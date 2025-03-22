@@ -31,10 +31,8 @@ const ChallengesPage = () => {
   }
 
   useEffect(() => {
-    if (!challenges || challenges.length === 0) {
-      getChallenges();
-    }
-  }, [challenges, getChallenges]);
+    getChallenges();
+  }, []);
 
   if (isGettingChallenges) {
     return (
@@ -43,13 +41,21 @@ const ChallengesPage = () => {
       </div>
     );
   }
-  
+
 
   return (
-    <div className="challenges-container p-5 py-20 bg-base-200 min-h-screen">
+    <div className="challenges-container p-24 bg-base-200 min-h-screen">
       {!isGettingChallenges &&
         (
           <div className="challenges-container py-20">
+            <div className="flex justify-between items-center mb-6">
+              <h1 className="text-2xl font-bold">Challenges</h1>
+              {isAdmin && (
+                <Link to="/admin/add-challenge" className="btn btn-primary">
+                  Add New Challenge
+                </Link>
+              )}
+            </div>
             <div className="relative  overflow-x-auto  shadow-md sm:rounded-lg">
               <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                 <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">

@@ -51,7 +51,7 @@ function App() {
             <Route path="/admin/teams" element={isAdmin ? <TeamsPage /> : <Navigate to="/login" />} />
             <Route path="/admin/submissions" element={isAdmin ? <SubmissionsPage /> : <Navigate to="/login" />} />
             <Route path="/admin/login" element={!user ? <AdminLoginPage /> : <Navigate to="/" />} />
-            <Route path="/admin/add-challenge" element={user ? <AddChallengePage /> : <Navigate to="/login" />} />
+            <Route path="/admin/add-challenge" element={isAdmin  ? <AddChallengePage /> : <Navigate to="/login" />} />
             <Route path="/profile" element={user ? <ProfilePage /> : <Navigate to="/login" />} />
             <Route
               path="/team/:teamId"

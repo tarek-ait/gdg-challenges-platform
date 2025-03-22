@@ -34,7 +34,7 @@ class Team(models.Model):
     )
     team_password = models.CharField(max_length=255)  # Hashed password for the team
     challenge = models.ForeignKey(
-        "Challenge",
+        Challenge,
         on_delete=models.SET_NULL,
         null=True,
         blank=True,
