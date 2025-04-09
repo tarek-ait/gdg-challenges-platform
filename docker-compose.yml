@@ -1,0 +1,18 @@
+services:
+  backend:
+    build:
+      context: ./backend
+    container_name: challenges-platform-backend-container
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend:/app
+
+  frontend:
+    build:
+      context: ./frontend
+    container_name: challenges-platform-frontend-container
+    ports:
+      - "5173:5173"
+    stdin_open: true
+    tty: true
